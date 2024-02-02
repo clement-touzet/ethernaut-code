@@ -10,8 +10,11 @@ interface Shop {
 contract Buyer {
     uint256 cheaperPrice = 1;
     uint256 initialPrice = 100;
-    address shopAddress = 0xB44565D1217cb12CA43eaF8a950573CC59Ce4973;
-    Shop shopContract = Shop(shopAddress);
+    Shop shopContract;
+
+    constructor(address _shopAddress) {
+        shopContract = Shop(_shopAddress);
+    }
 
     function buyCheaper() external {
         shopContract.buy();
